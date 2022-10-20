@@ -97,35 +97,47 @@ let dataGlasses = [
 	},
 ];
 
-(arrGlasses => {
-	const content = arrGlasses
-		.map(item => {
-			let { src, name, id } = item;
-			return `
+export class GlassesList {
+	glassesList = [];
+	saveLocalStore = () => {
+		localStorage.setItem('glassesList', JSON.stringify(dataGlasses));
+	};
+
+	getLocalStore = name => {
+		if (localStorage.getItem('glassesList'))
+			this.glassesList = JSON.parse(localStorage.getItem(name));
+	};
+
+	renderGlassesList = selector => {
+		let content = this.glassesList
+			.map(glass => {
+				let { src, name, id } = glass;
+				return `
       <div class="col-4 vglasses__items" style="height: 150px">
-        <img src=${src} alt=${name} style="width: 100%; height: 100%" onclick="getInfoGlasses('${id}')">
+        <img src=${src} alt=${name} style="width: 100%; height: 100%" data-imgID="${id}">
       </div>
     `;
-		})
-		.join('');
-	document.getElementById('vglassesList').innerHTML = content;
-})(dataGlasses);
+			})
+			.join('');
+		document.getElementById(selector).innerHTML = content;
+	};
 
-const getInfoGlasses = id => {
-	let glassClone = [...dataGlasses];
-	const glassItem = glassClone.filter(item => item.id === id);
-	let { name, brand, color, price, description, virtualImg } = glassItem[0];
-	let content = `
-    <h4>${name} (${color})</h4>
-    <button class="btn btn-danger mr-2 font-weight-bold">$${price}</button>
-    <span class="text-success">${brand}</span>
-    <p class="mt-3">${description}</p>
-  `;
-	const eleGlassInfo = document.querySelector('.vglasses__info');
-	eleGlassInfo.style.display = 'block';
-	eleGlassInfo.innerHTML = content;
-	const glassImg = `
-    <img src=${virtualImg} id="glasses"/>
-  `;
-	document.querySelector('#avatar').innerHTML = glassImg;
-};
+	handelChangeGlasses = id => {
+		let glassClone = [...dataGlasses];
+		const glassItem = glassClone.filter(item => item.id === id);
+		let { name, brand, color, price, description, virtualImg } = glassItem[0];
+		let content = `
+		    <h4>${name} (${color})</h4>
+		    <button class="btn btn-danger mr-2 font-weight-bold">$${price}</button>
+		    <span class="text-success">${brand}</span>
+		    <p class="mt-3">${description}</p>
+		  `;
+		const eleGlassInfo = document.querySelector('.vglasses__info');
+		eleGlassInfo.style.display = 'block';
+		eleGlassInfo.innerHTML = content;
+		const glassImg = `
+		    <img src=${virtualImg} id="glasses"/>
+		  `;
+		document.querySelector('#avatar').innerHTML = glassImg;
+	};
+}
