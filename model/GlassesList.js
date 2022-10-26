@@ -99,6 +99,7 @@ let dataGlasses = [
 
 export class GlassesList {
 	glassesList = [];
+	glassBefore = [];
 	saveLocalStore = () => {
 		localStorage.setItem('glassesList', JSON.stringify(dataGlasses));
 	};
@@ -122,10 +123,11 @@ export class GlassesList {
 		document.getElementById(selector).innerHTML = content;
 	};
 
-	handelChangeGlasses = id => {
+	handelChangeGlasses = idGlass => {
 		let glassClone = [...dataGlasses];
-		const glassItem = glassClone.filter(item => item.id === id);
-		let { name, brand, color, price, description, virtualImg } = glassItem[0];
+		const glassItem = glassClone.filter(item => item.id === idGlass);
+		let { id, name, brand, color, price, description, virtualImg } =
+			glassItem[0];
 		let content = `
 		    <h4>${name} (${color})</h4>
 		    <button class="btn btn-danger mr-2 font-weight-bold">$${price}</button>
@@ -136,7 +138,7 @@ export class GlassesList {
 		eleGlassInfo.style.display = 'block';
 		eleGlassInfo.innerHTML = content;
 		const glassImg = `
-		    <img src=${virtualImg} id="glasses"/>
+		    <img src=${virtualImg} id="glasses" data-idGlasses="${id}"/>
 		  `;
 		document.querySelector('#avatar').innerHTML = glassImg;
 	};
